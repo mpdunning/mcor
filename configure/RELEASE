@@ -1,0 +1,19 @@
+# RELEASE - Location of external support ules
+#
+# IF YOU MAKE ANY CHANGES to this file you must subsequently
+# do a "gnumake rebuild" in this application's top level
+# directory.
+#--------------------------------------------------------------------------
+include $(TOP)/../../../RELEASE_SITE
+
+TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
+
+#EPICS_MOD=$(EPICS_SITE_TOP)/modules
+#
+#ASYN=$(EPICS_MOD)/asyn/R4.26
+#AUTOSAVE=$(EPICS_MOD)/autosave/R5.5
+#IPAC=$(EPICS_MOD)/ipac/R2.11
+#IP231=$(EPICS_MOD)/ip231-asyn/R1.0
+#IP330=$(EPICS_MOD)/ip330-asyn/R2.7
+
+EPICS_BASE=$(EPICS_SITE_TOP)/base

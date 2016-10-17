@@ -1,0 +1,234 @@
+record(stringout, "$(P):$(TYPE):$(NAME):DACCH"){
+  field( DESC, "DAC:$(DAC) CH:$(DACCH)")
+  field( VAL,  "$(TYPE) $(NAME)")
+  field( OUT,  "$(P):$(R):$(DAC):AO:SC:CH$(DACCH).DESC")
+  field( PINI, "1")
+}
+record(stringout, "$(P):$(TYPE):$(NAME):ADCCH"){
+  field( DESC, "ADC:$(ADC) CH:$(ADCCH)")
+  field( VAL,  "$(TYPE) $(NAME)")
+  field( OUT,  "$(P):$(R):$(ADC):CH$(ADCCH).DESC")
+  field( PINI, "1")
+}
+#-------------------------------------------------
+record(ao, "$(P):$(TYPE):$(NAME):BDES"){
+  field( DESC, "B-field desired value")
+  field( EGU,  "$(EGU)")
+  field( PREC, "$(PREC)")
+  field( DRVL, "$(DRVL)")
+  field( DRVH, "$(DRVH)")
+  field( LOPR, "$(DRVL)")
+  field( HOPR, "$(DRVH)")
+  field( LOLO, "$(LOLO)")
+  field( HIHI, "$(HIHI)")
+  field( HHSV, "MAJOR")
+  field( LLSV, "MAJOR")
+  field( FLNK, "$(P):$(TYPE):$(NAME):BDES:WRITE")
+}
+record(calcout, "$(P):$(TYPE):$(NAME):BDES:WRITE"){
+  field( DESC, "")
+  field( EGU,  "A")
+  field( PREC, "$(PREC)")
+  field( SDIS, "$(P):$(TYPE):$(NAME):BDES:SYNC.PACT")
+  field( DISV, "1")
+  field( INPA, "$(P):$(TYPE):$(NAME):BDES")
+  field( INPB, "$(IVBU0)")
+  field( INPC, "$(IVBU1)")
+  field( INPD, "$(IVBU2)")
+  field( INPE, "$(IVBU3)")
+  field( INPF, "$(IVBU4)")
+  field( INPG, "$(IVBU5)")
+  field( CALC, "B + C*A + D*A^2 + E*A^3 + F*A^4 + G*A^5")
+  field( OUT,  "$(P):$(TYPE):$(NAME):IDES PP")
+}
+record(aSub, "$(P):$(TYPE):$(NAME):BDES:RBV"){
+  field( DESC, "")
+  field( SNAM, "asItoB")
+  field( PREC, "$(PREC)")
+  field( INPA, "$(P):$(TYPE):$(NAME):IDES CPP")
+  field( FTA,  "DOUBLE")    field( NOA, "1")
+  field( INPB, "$(NCOEF)")
+  field( FTB,  "SHORT")    field( NOB, "1")
+  field( INPC, "$(IVBU0)")
+  field( FTC,  "DOUBLE")    field( NOC, "1")
+  field( INPD, "$(IVBU1)")
+  field( FTD,  "DOUBLE")    field( NOD, "1")
+  field( INPE, "$(IVBU2)")
+  field( FTE,  "DOUBLE")    field( NOE, "1")
+  field( INPF, "$(IVBU3)")
+  field( FTF,  "DOUBLE")    field( NOF, "1")
+  field( INPG, "$(IVBU4)")
+  field( FTG,  "DOUBLE")    field( NOG, "1")
+  field( INPH, "$(IVBU5)")
+  field( FTH,  "DOUBLE")    field( NOH, "1")
+  field( INPI, "$(TOL)")
+  field( FTI,  "DOUBLE")    field( NOI, "1")
+  field( INPJ, "$(BMAX)")
+  field( FTJ,  "DOUBLE")    field( NOJ, "1")
+  field( FTVA, "DOUBLE")    field( NOVA, "1")
+  field( FLNK, "$(P):$(TYPE):$(NAME):BDES:SYNC")
+}
+record(ao, "$(P):$(TYPE):$(NAME):BDES:SYNC"){
+  field( DESC, "")
+  field( EGU,  "$(EGU)")
+  field( PREC, "$(PREC)")
+  field( DOL,  "$(P):$(TYPE):$(NAME):BDES:RBV.VALA NPP")
+  field( OMSL, "closed_loop")
+  field( OUT,  "$(P):$(TYPE):$(NAME):BDES PP")
+}
+#--------------------------------------------------
+record(ao, "$(P):$(TYPE):$(NAME):IDES"){
+  field( DESC, "Current desired value")
+  field( EGU,  "A")
+  field( PREC, "$(PREC)")
+  field( FLNK, "$(P):$(TYPE):$(NAME):IDES:WRITE")
+}
+record(calcout, "$(P):$(TYPE):$(NAME):IDES:WRITE"){
+  field( DESC, "")
+  field( EGU,  "V")
+  field( PREC, "$(PREC)")
+  field( SDIS, "$(P):$(TYPE):$(NAME):IDES:SYNC.PACT")
+  field( DISV, "1")
+  field( INPA, "$(P):$(TYPE):$(NAME):IDES")
+  field( INPB, "$(DVI)")
+  field( CALC, "A/B")
+  field( OUT,  "$(P):$(TYPE):$(NAME):DACV PP")
+}
+record(calc, "$(P):$(TYPE):$(NAME):IDES:RBV"){
+  field( DESC, "IDES from DACV RBV")
+  field( EGU,  "A")
+  field( PREC, "$(PREC)")
+  field( INPA, "$(P):$(TYPE):$(NAME):DACV:RBV CPP")
+  field( INPB, "$(DVI)")
+  field( CALC, "A*B")
+  field( FLNK, "$(P):$(TYPE):$(NAME):IDES:SYNC")
+}
+record(ao, "$(P):$(TYPE):$(NAME):IDES:SYNC"){
+  field( DESC, "")
+  field( EGU,  "A")
+  field( PREC, "$(PREC)")
+  field( DOL,  "$(P):$(TYPE):$(NAME):IDES:RBV NPP")
+  field( OMSL, "closed_loop")
+  field( OUT,  "$(P):$(TYPE):$(NAME):IDES PP")
+}
+#--------------------------------------------------
+record(ao, "$(P):$(TYPE):$(NAME):DACV"){
+  field( DESC, "DAC volts")
+  field( EGU,  "V")
+  field( PREC, "$(PREC)")
+  field( OUT,  "$(P):$(TYPE):$(NAME):DACV:WRITE PP")
+}
+record(calcout, "$(P):$(TYPE):$(NAME):DACV:WRITE"){
+  field( DESC, "")
+  field( EGU,  "V")
+  field( PREC, "$(PREC)")
+  field( SDIS, "$(P):$(TYPE):$(NAME):DACV:SYNC.PACT")
+  field( DISV, "1")
+  field( INPA, "$(P):$(TYPE):$(NAME):IDES")
+  field( INPB, "$(DVI)")
+  field( CALC, "A/B")
+  field( OUT,  "$(P):$(R):$(DAC):AO:SC:CH$(DACCH) CPP")
+  field( FLNK, "$(P):$(TYPE):$(NAME):ADCV")
+}
+record(ai, "$(P):$(TYPE):$(NAME):DACV:RBV"){
+  field( DESC, "")
+  field( EGU,  "V")
+  field( PREC, "$(PREC)")
+  field( INP,  "$(P):$(R):$(DAC):AI:CH$(DACCH) CPP MS")
+  field( FLNK, "$(P):$(TYPE):$(NAME):DACV:SYNC")
+}
+record(ao, "$(P):$(TYPE):$(NAME):DACV:SYNC"){
+  field( DESC, "")
+  field( EGU,  "V")
+  field( PREC, "$(PREC)")
+  field( DOL,  "$(P):$(TYPE):$(NAME):DACV:RBV NPP")
+  field( OMSL, "closed_loop")
+  field( OUT,  "$(P):$(TYPE):$(NAME):DACV PP")
+}
+#--------------------------------------------------
+record(ai, "$(P):$(TYPE):$(NAME):ADCV"){
+  field( DESC, "ADC Volts")
+  field( EGU,  "V")
+  field( PREC, "$(PREC)")
+  field( INP,  "$(P):$(R):$(ADC):CH$(ADCCH) CPP MS")
+}
+record(compress, "$(P):$(TYPE):$(NAME):ADCV:AVE"){
+  field( DESC, "Averaged ADC Volts")
+  field( EGU,  "V")
+  field( PREC, "$(PREC)")
+  field( INP,  "$(P):$(TYPE):$(NAME):ADCV CP MS")
+  field( ALG,  "N to 1 Average")
+  field( NSAM, "1")
+  field( N,    "100")
+  field( FLNK, "$(P):$(TYPE):$(NAME):IACT")
+}
+#--------------------------------------------------
+record(calc, "$(P):$(TYPE):$(NAME):IACT"){
+  field( DESC, "Current actual value")
+  field( EGU,  "A")
+  field( PREC, "$(PREC)")
+  field( INPA, "$(P):$(TYPE):$(NAME):ADCV:AVE")
+  field( INPB, "$(IVA)")
+  field( CALC, "A*B")
+  field( FLNK, "$(P):$(TYPE):$(NAME):BACT:ASUB")
+}
+record(calc, "$(P):$(TYPE):$(NAME):MISMATCH"){
+  field( DESC, "ACT-DES mismatch")
+  field( EGU,  "%")
+  field( PREC, "$(PREC)")
+  field( INPA, "$(P):$(TYPE):$(NAME):IDES")
+  field( INPB, "$(P):$(TYPE):$(NAME):IACT")
+  field( CALC, "A=0?0:((ABS(A-B))/A)*100")
+  field( LOLO, "0")
+  field( LOW,  "0")
+  field( HIGH, "3")
+  field( HIHI, "5")
+  field( HHSV, "MAJOR")
+  field( HSV,  "MINOR")
+  field( LLSV, "NO_ALARM")
+  field( LSV,  "NO_ALARM")
+  field( SCAN, "5 second")
+}
+#----------------------------------------------
+record(aSub, "$(P):$(TYPE):$(NAME):BACT:ASUB"){
+  field( DESC, "")
+  field( SNAM, "asItoB")
+  field( PREC, "$(PREC)")
+  field( INPA, "$(P):$(TYPE):$(NAME):IACT")
+  field( FTA,  "DOUBLE")    field( NOA, "1")
+  field( INPB, "$(NCOEF)")
+  field( FTB,  "SHORT")    field( NOB, "1")
+  field( INPC, "$(IVBU0)")
+  field( FTC,  "DOUBLE")    field( NOC, "1")
+  field( INPD, "$(IVBU1)")
+  field( FTD,  "DOUBLE")    field( NOD, "1")
+  field( INPE, "$(IVBU2)")
+  field( FTE,  "DOUBLE")    field( NOE, "1")
+  field( INPF, "$(IVBU3)")
+  field( FTF,  "DOUBLE")    field( NOF, "1")
+  field( INPG, "$(IVBU4)")
+  field( FTG,  "DOUBLE")    field( NOG, "1")
+  field( INPH, "$(IVBU5)")
+  field( FTH,  "DOUBLE")    field( NOH, "1")
+  field( INPI, "$(TOL)")
+  field( FTI,  "DOUBLE")    field( NOI, "1")
+  field( INPJ, "$(BMAX)")
+  field( FTJ,  "DOUBLE")    field( NOJ, "1")
+  field( FTVA, "DOUBLE")    field( NOVA, "1")
+  field( FLNK, "$(P):$(TYPE):$(NAME):BACT")
+}
+record(ai, "$(P):$(TYPE):$(NAME):BACT"){
+  field( DESC, "B-field actual value")
+  field( EGU,  "$(EGU)")
+  field( PREC, "$(PREC)")
+  field( INP, "$(P):$(TYPE):$(NAME):BACT:ASUB.VALA")
+}
+#-------------------------------------------------
+record(ai, "$(P):$(TYPE):$(NAME):BCON"){
+  field( DESC, "B-field config value")
+  field( EGU,  "$(EGU)")
+  field( PREC, "$(PREC)")
+}
+
+
+
